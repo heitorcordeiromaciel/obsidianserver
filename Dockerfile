@@ -6,6 +6,5 @@ COPY PBS ./PBS
 COPY server.py ./server.py
 
 EXPOSE 25565
-EXPOSE 8080
 
 CMD ["python", "server.py"]
