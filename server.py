@@ -1,3 +1,5 @@
+import threading
+from http.server import HTTPServer, BaseHTTPRequestHandler
 import argparse
 import collections
 import configparser
@@ -592,3 +594,15 @@ if __name__ == "__main__":
     logging.info('---------------')
     Server(args.host, int(args.port), args.pbs_dir,args.rules_dir).run()
     logging.shutdown()
+
+class DummyHandler(BaseHTTPRequestHandler):
+    def do_GET(self):
+        self.send_response(200)
+        self.end_headers()
+        self.wfile.write(b"Server running")
+
+def start_dummy_http():
+    server = HTTPServer(('0.0.0.0', 8080), DummyHandler)
+    server.serve_forever()
+
+threading.Thread(target=start_dummy_http, daemon=True).start()
